@@ -1,0 +1,42 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Hello</h1>
+    
+    <ul id="customer-list"></ul>
+
+    <script>
+      function fetchCustomers() {
+        fetch("http://localhost:3000/api/customers")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to connect");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            const customerLists = document.getElementById("customer-list");
+            customerLists.innerHTML = "";
+
+            data.customers.forEach((customer) => {
+              const item = document.createElement("li");
+              item.textContent = `Name: ${customer.name}, email: ${customer.email}`;
+              customerLists.appendChild(item);
+            });
+          })
+          .catch((error) => {
+            console.error("Fetch failed", error);
+          });
+      }
+
+      window.onload = function () {
+        fetchCustomers();
+      };
+    </script>
+  </body>
+</html>
